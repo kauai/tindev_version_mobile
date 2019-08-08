@@ -10,7 +10,8 @@ export default function Login({ navigation }) {
     useEffect(() => {
         AsyncStorage.getItem('user')
         .then(item => {
-            if(item) navigation.navigate('Main',{ user })
+            console.log(item)
+            if(item) navigation.navigate('Main',{ user: item })
         })
     },[])
 
@@ -18,9 +19,9 @@ export default function Login({ navigation }) {
         api.post('/devs',{
             username:user
         }).then( async ({ data:{ _id } }) => {
-            // console.log(_id)
+            console.log('aaa',_id)
             await AsyncStorage.setItem('user',_id)
-            navigation.navigate('Main',{ _id })
+            navigation.navigate('Main',{user:_id})
         }).catch(e => {
             console.log(e)
         })
