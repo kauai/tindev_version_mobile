@@ -1,18 +1,37 @@
-import React from 'react'
+import React,{ useState } from 'react'
 import { View, Text, StyleSheet, Image,TextInput,TouchableOpacity } from 'react-native'
 import logo from '../assets/logo.png'
+import api from '../services/api'
 
-export default function Login() {
+export default function Login({ navigation }) {
+    const [ user, setUser ] = useState('')
+
+    function handleLogin(){
+        api.post('/devs',{
+            username:user
+        }).then(({ data:{ _id } }) => {
+            // console.log(_id)
+            navigation.navigate('Main',{ _id })
+        }).catch(e => {
+            console.log(e)
+        })
+    }
+
+
    return (
          <View style={styles.container}>
             <Image source={logo}/>
             <TextInput 
+                onChangeText={setUser}
+                value={user}
                 autoCapitalize="none"
                 autoCorrect={false}
                 style={styles.input}
                 placeholderTextColor="#999" 
                 placeholder="Digite seu usuario"/>
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity 
+            onPress={handleLogin}
+            style={styles.button}>
                 <Text style={styles.buttonText}>Enviar</Text>
             </TouchableOpacity>
           </View> )
